@@ -116,5 +116,5 @@ work_list = os.listdir(source_folder)
 # os.path.isdir(path) - проверка является ли путь директорией.
 # os.path.isfile(path) - является ли путь файлом.
 result = None
-if result.is
+# if result.is
 print(type(result))
