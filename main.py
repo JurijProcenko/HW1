@@ -1,6 +1,6 @@
 """ Garbadge sorter
-Take one argument - folder for sotring.
-It's moving files to folders:
+Take one argument - folder for sorting.
+He's sorting and moving files to folders:
 images, documents, video, audio, archives
 
 """
@@ -12,7 +12,8 @@ import string
 
 # Check folder for empty and delete
 def isempty(folder: str):
-    pass
+    if not os.listdir(folder):
+        os.rmdir(folder)
 
 
 # Rename file name from cyrillic to latin
@@ -43,7 +44,7 @@ def sort_and_move(folder: str):
 
 # Taking an argument from command line
 # source_folder = argv[1]
-source_folder = "w:\\Projects\\HW1\\Downloads"
+source_folder = "w:\\Projects\\HW1\\1"
 
 # Cyrillic and latin
 cyr_lat = {
@@ -102,6 +103,7 @@ unknown_ext = set()
 
 # print(normalize("Выхожу   odin (я) на дорогу&*!2.mp3"))
 work_list = os.listdir(source_folder)
+print(work_list)
 # for w in work_list:
 #     print(w)
 
@@ -111,10 +113,11 @@ work_list = os.listdir(source_folder)
 # os.listdir(path=".") - список файлов и директорий в папке.
 # os.chdir(path) - смена текущей директории.
 # os.mkdir(path, mode=0o777, *, dir_fd=None) - создаёт директорию. OSError, если директория существует.
-# os.rmdir(path, *, dir_fd=None) - удаляет пустую директорию.os.system(command) -
+# os.rmdir(path, *, dir_fd=None) - удаляет пустую директорию.
+# os.system(command) -
 # исполняет системную команду, возвращает код её завершения (в случае успеха 0)
 # os.path.isdir(path) - проверка является ли путь директорией.
 # os.path.isfile(path) - является ли путь файлом.
-result = None
+
 # if result.is
-print(type(result))
+
