@@ -32,6 +32,7 @@ def normalize(cyrillic_name: str) -> str:
 
 
 def rename_all_files():
+    dest_folders.pop("unknown")
     for key in dest_folders:
         # home = Path(dest_folders[key]+'\\')
         os.chdir(dest_folders[key])
@@ -45,7 +46,16 @@ def make_dir():
         try:
             os.mkdir(dest_folders[key])
         except:
-            print(f"Folder {key} is alredy exists")
+            pass
+
+
+def make_heap():
+    os.mkdir(dest_folders["unknown"])
+    for next_file in home.rglob("*.*"):
+        if next_file.is_file():
+            name = next_file.name
+            next_file = str(next_file)
+            os.rename(next_file, dest_folders["unknown"] + "\\" + name)
 
 
 def move_files():
@@ -64,16 +74,23 @@ def move_files():
 
 def find_unknown_ext():
     # Собираем неизвестные расширения в множество
-    for next_file in home.glob(f"**/*.*"):
+    for next_file in Path(dest_folders["unknown"]).glob("*.*"):
+        name = next_file.name
+        ext = next_file.suffix
         next_file = str(next_file)
-        if next_file[next_file.rfind(".") + 1 :].lower() not in known_ext:
+        if ext not in known_ext:
             unknown_ext.add(next_file[next_file.rfind(".") + 1 :].lower())
 
 
 def remove_empty_folders():
-    for next_file in home.glob(f"**/*"):
-        if next_file.is_dir() and len(os.listdir(next_file)) == 0:
-            next_file.rmdir()
+    # for next_file in Path(source_folder).rglob("*"):
+    #     if next_file.is_dir() and len(os.listdir(next_file)) == 0:
+    #         next_file.rmdir()
+    for root, dirs, files in os.walk(source_folder, topdown=False):
+        for d in dirs:
+            curpath = os.path.join(root, d)
+            if not os.listdir(curpath):
+                os.rmdir(curpath)
 
 
 def unpack_archives():
@@ -138,10 +155,11 @@ dest_folders = {
     "video": source_folder + "\\video",
     "audio": source_folder + "\\audio",
     "archives": source_folder + "\\archives",
+    "unknown": source_folder + "\\unknown",
 }
 extentions = {
     "image": ["JPEG", "PNG", "JPG", "SVG"],
-    "doc": ["DOC", "DOCX", "TXT", "PDF", "XLSX", "PPTX"],
+    "doc": ["DOC", "DOCX", "TXT", "PDF", "XLSX", "PPTX", "XLS"],
     "video": ["AVI", "MP4", "MOV", "MKV"],
     "audio": ["MP3", "OGG", "WAV", "AMR"],
     "archives": ["ZIP", "GZ", "TAR"],
@@ -156,6 +174,7 @@ extention_list = [
     "TXT",
     "PDF",
     "XLSX",
+    "XLS",
     "PPTX",
     "AVI",
     "MP4",
@@ -173,9 +192,12 @@ extention_list = [
 known_ext = set()
 unknown_ext = set()
 
+make_heap()  # перемещаем все в кучу в папку unknown
+remove_empty_folders()  # Удаляем пустые папки
 make_dir()  # Создаем папки назначения
 move_files()  # Переносим файлы известных типов в папки назначения
-remove_empty_folders()  # Удаляем пустые папки
 find_unknown_ext()  # Собираем неизвестные расширения
 rename_all_files()  # Переводим названия фалов в транслит
 unpack_archives()  # Распаковываем архивы
+print("Известные найденные расширения файлов: ", known_ext)
+print("Неизвестные найденные расширения файлов: ", unknown_ext)
