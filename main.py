@@ -81,9 +81,8 @@ def unpack_archives():
         name = str(next_file)
         dest = name[: name.rfind(".")] + "\\"
         os.mkdir(dest)
-        zip_command = f"tar -xvzf {name} -C {dest}"
+        zip_command = f"tar -xqzf {name} -C {dest}"
         try:
-            print(name)
             os.system(zip_command)
         except:
             print(f"Something wrong with file {name}")
