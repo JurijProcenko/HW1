@@ -55,7 +55,10 @@ def make_heap():
         if next_file.is_file():
             name = next_file.name
             next_file = str(next_file)
-            os.rename(next_file, dest_folders["unknown"] + "\\" + name)
+            try:
+                os.rename(next_file, dest_folders["unknown"] + "\\" + name)
+            except:
+                print(f"File {next_file} exists in destination folder")
 
 
 def move_files():
@@ -105,6 +108,7 @@ def unpack_archives():
             print(f"Something wrong with file {name}")
         next_file.unlink()
 
+
 def main():
     make_heap()  # перемещаем все в кучу в папку unknown
     remove_empty_folders()  # Удаляем пустые папки
@@ -117,7 +121,7 @@ def main():
     print("Неизвестные найденные расширения файлов: ", unknown_ext)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Taking an argument from command line
     source_folder = argv[1]
     # source_folder = "w:\\Projects\\HW1\\1"
@@ -205,7 +209,3 @@ if __name__ == '__main__':
     unknown_ext = set()
 
     main()
-
-
-
-
