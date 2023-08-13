@@ -105,99 +105,107 @@ def unpack_archives():
             print(f"Something wrong with file {name}")
         next_file.unlink()
 
+def main():
+    make_heap()  # перемещаем все в кучу в папку unknown
+    remove_empty_folders()  # Удаляем пустые папки
+    make_dir()  # Создаем папки назначения
+    move_files()  # Переносим файлы известных типов в папки назначения
+    find_unknown_ext()  # Собираем неизвестные расширения
+    rename_all_files()  # Переводим названия фалов в транслит
+    unpack_archives()  # Распаковываем архивы
+    print("Известные найденные расширения файлов: ", known_ext)
+    print("Неизвестные найденные расширения файлов: ", unknown_ext)
 
-# Taking an argument from command line
-# source_folder = argv[1]
-source_folder = "w:\\Projects\\HW1\\1"
-home = Path(source_folder)
 
-# Cyrillic and latin
-cyr_lat = {
-    "а": "a",
-    "б": "b",
-    "в": "v",
-    "г": "g",
-    "д": "d",
-    "е": "e",
-    "ё": "yo",
-    "ж": "zh",
-    "з": "z",
-    "и": "i",
-    "й": "j",
-    "к": "k",
-    "л": "l",
-    "м": "m",
-    "н": "n",
-    "о": "o",
-    "п": "p",
-    "р": "r",
-    "с": "s",
-    "т": "t",
-    "у": "u",
-    "ф": "f",
-    "х": "h",
-    "ц": "c",
-    "ч": "ch",
-    "ш": "sh",
-    "щ": "shh",
-    "ь": "",
-    "ы": "y",
-    "ъ": "",
-    "э": "je",
-    "ю": "ju",
-    "я": "ja",
-}
+if __name__ == '__main__':
+    # Taking an argument from command line
+    source_folder = argv[1]
+    # source_folder = "w:\\Projects\\HW1\\1"
+    home = Path(source_folder)
 
-# Destination folders
-dest_folders = {
-    "image": source_folder + "\\images",
-    "doc": source_folder + "\\documents",
-    "video": source_folder + "\\video",
-    "audio": source_folder + "\\audio",
-    "archives": source_folder + "\\archives",
-    "unknown": source_folder + "\\unknown",
-}
-extentions = {
-    "image": ["JPEG", "PNG", "JPG", "SVG"],
-    "doc": ["DOC", "DOCX", "TXT", "PDF", "XLSX", "PPTX", "XLS"],
-    "video": ["AVI", "MP4", "MOV", "MKV"],
-    "audio": ["MP3", "OGG", "WAV", "AMR"],
-    "archives": ["ZIP", "GZ", "TAR"],
-}
-extention_list = [
-    "JPEG",
-    "PNG",
-    "JPG",
-    "SVG",
-    "DOC",
-    "DOCX",
-    "TXT",
-    "PDF",
-    "XLSX",
-    "XLS",
-    "PPTX",
-    "AVI",
-    "MP4",
-    "MOV",
-    "MKV",
-    "MP3",
-    "OGG",
-    "WAV",
-    "AMR",
-    "ZIP",
-    "GZ",
-    "TAR",
-]
-# Sets for known and unknown extentions
-known_ext = set()
-unknown_ext = set()
+    # Cyrillic and latin
+    cyr_lat = {
+        "а": "a",
+        "б": "b",
+        "в": "v",
+        "г": "g",
+        "д": "d",
+        "е": "e",
+        "ё": "yo",
+        "ж": "zh",
+        "з": "z",
+        "и": "i",
+        "й": "j",
+        "к": "k",
+        "л": "l",
+        "м": "m",
+        "н": "n",
+        "о": "o",
+        "п": "p",
+        "р": "r",
+        "с": "s",
+        "т": "t",
+        "у": "u",
+        "ф": "f",
+        "х": "h",
+        "ц": "c",
+        "ч": "ch",
+        "ш": "sh",
+        "щ": "shh",
+        "ь": "",
+        "ы": "y",
+        "ъ": "",
+        "э": "je",
+        "ю": "ju",
+        "я": "ja",
+    }
 
-make_heap()  # перемещаем все в кучу в папку unknown
-remove_empty_folders()  # Удаляем пустые папки
-make_dir()  # Создаем папки назначения
-move_files()  # Переносим файлы известных типов в папки назначения
-find_unknown_ext()  # Собираем неизвестные расширения
-rename_all_files()  # Переводим названия фалов в транслит
-unpack_archives()  # Распаковываем архивы
-print("Известные найденные расширения файлов: ", known_ext)
-print("Неизвестные найденные расширения файлов: ", unknown_ext)
+    # Destination folders
+    dest_folders = {
+        "image": source_folder + "\\images",
+        "doc": source_folder + "\\documents",
+        "video": source_folder + "\\video",
+        "audio": source_folder + "\\audio",
+        "archives": source_folder + "\\archives",
+        "unknown": source_folder + "\\unknown",
+    }
+    extentions = {
+        "image": ["JPEG", "PNG", "JPG", "SVG"],
+        "doc": ["DOC", "DOCX", "TXT", "PDF", "XLSX", "PPTX", "XLS"],
+        "video": ["AVI", "MP4", "MOV", "MKV"],
+        "audio": ["MP3", "OGG", "WAV", "AMR"],
+        "archives": ["ZIP", "GZ", "TAR"],
+    }
+    extention_list = [
+        "JPEG",
+        "PNG",
+        "JPG",
+        "SVG",
+        "DOC",
+        "DOCX",
+        "TXT",
+        "PDF",
+        "XLSX",
+        "XLS",
+        "PPTX",
+        "AVI",
+        "MP4",
+        "MOV",
+        "MKV",
+        "MP3",
+        "OGG",
+        "WAV",
+        "AMR",
+        "ZIP",
+        "GZ",
+        "TAR",
+    ]
+    # Sets for known and unknown extentions
+    known_ext = set()
+    unknown_ext = set()
+
+    main()
+
+
+
+
