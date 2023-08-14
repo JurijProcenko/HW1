@@ -61,7 +61,10 @@ def confirm_replace(next_file, dest):
         ext = dest[dest.rfind(".") :]
         dest = dest[: dest.rfind(".")]
         dest = dest + add_sym + ext
-        os.replace(next_file, dest)
+        try:
+            os.rename(next_file, dest)
+        except:
+            confirm_replace(next_file, dest)
     else:
         print(f"File {next_file} skipped")
 
