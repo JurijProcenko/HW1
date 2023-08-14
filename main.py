@@ -140,6 +140,9 @@ def main():
 if __name__ == "__main__":
     # Taking an argument from command line
     source_folder = argv[1]
+    if not source_folder:
+        print("Please, give me path and source folder's name")
+        source_folder = input('>>> ')
     # source_folder = "w:\\Projects\\HW1\\1"
     home = Path(source_folder)
 
