@@ -146,7 +146,7 @@ if __name__ == "__main__":
         source_folder = input(">>> ")
         if not source_folder:
             print("Можливо наступного разу?")
-            break
+            exit()
 
     # source_folder = "w:\\Projects\\HW1\\1"
     home = Path(source_folder)
