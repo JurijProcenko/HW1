@@ -49,6 +49,22 @@ def make_dir():
             pass
 
 
+def confirm_replace(next_file, dest):
+    print(f"File {next_file} exists in destination folder")
+    answer = input(f"Do you want overwrite file {next_file} or rename? y/n/r")
+    if answer in 'YyдД':
+        os.rename(next_file, dest)
+    elif answer in 'rRрР':
+        add_sym = input('Take me a few symbols(one or more) to add to name file')
+        ext = dest = dest[dest.endswith('.'):]
+        dest = dest[:dest.endswith('.')]
+        dest = dest + add_sym + ext
+        os.rename(next_file, dest)
+    else:
+        print(f'File {next_file} skipped')
+
+
+
 def make_heap():
     os.mkdir(dest_folders["unknown"])
     for next_file in home.rglob("*.*"):
@@ -58,7 +74,7 @@ def make_heap():
             try:
                 os.rename(next_file, dest_folders["unknown"] + "\\" + name)
             except:
-                print(f"File {next_file} exists in destination folder")
+                confirm_replace(next_file, dest_folders["unknown"] + "\\" + name)
 
 
 def move_files():
@@ -71,8 +87,8 @@ def move_files():
                 try:
                     os.rename(next_file, dest_folders[key] + "\\" + name)
                 except:
-                    # os.remove(next_file)
-                    print(f"File {next_file} exists in destination folder")
+                    confirm_replace(next_file, dest_folders[key] + "\\" + name)
+                    
 
 
 def find_unknown_ext():
