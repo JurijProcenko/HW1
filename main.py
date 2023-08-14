@@ -51,18 +51,19 @@ def make_dir():
 
 def confirm_replace(next_file, dest):
     print(f"File {next_file} exists in destination folder")
-    answer = input(f"Do you want overwrite file {next_file} or rename? y/n/r")
-    if answer in 'YyдД':
-        os.rename(next_file, dest)
-    elif answer in 'rRрР':
-        add_sym = input('Take me a few symbols(one or more) to add to name file')
-        ext = dest = dest[dest.endswith('.'):]
-        dest = dest[:dest.endswith('.')]
+    answer = input(
+        f"Do you want overwrite file {next_file}, skip or rename? y/s/r >>> "
+    )
+    if answer in "YyдД":
+        os.replace(next_file, dest)
+    elif answer in "rRрР":
+        add_sym = input("Take me a few symbols(one or more) to add to name file >>> ")
+        ext = dest[dest.rfind(".") :]
+        dest = dest[: dest.rfind(".")]
         dest = dest + add_sym + ext
-        os.rename(next_file, dest)
+        os.replace(next_file, dest)
     else:
-        print(f'File {next_file} skipped')
-
+        print(f"File {next_file} skipped")
 
 
 def make_heap():
@@ -88,7 +89,6 @@ def move_files():
                     os.rename(next_file, dest_folders[key] + "\\" + name)
                 except:
                     confirm_replace(next_file, dest_folders[key] + "\\" + name)
-                    
 
 
 def find_unknown_ext():
@@ -139,10 +139,15 @@ def main():
 
 if __name__ == "__main__":
     # Taking an argument from command line
-    source_folder = argv[1]
-    if not source_folder:
+    try:
+        source_folder = argv[1]
+    except:
         print("Please, give me path and source folder's name")
-        source_folder = input('>>> ')
+        source_folder = input(">>> ")
+        if not source_folder:
+            print("Можливо наступного разу?")
+            break
+
     # source_folder = "w:\\Projects\\HW1\\1"
     home = Path(source_folder)
 
