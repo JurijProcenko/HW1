@@ -121,12 +121,14 @@ def unpack_archives():
         name = str(next_file)
         dest = name[: name.rfind(".")] + "\\"
         os.mkdir(dest)
-        zip_command = f"tar -xqzf {name} -C {dest}"
+        zip_command = f"tar -C {dest} -xf {name}"
         try:
             os.system(zip_command)
         except:
             print(f"Something wrong with file {name}")
-        next_file.unlink()
+    for next_file in Path(dest_folders["archives"]).glob("*.*"):
+        if next_file.is_file():
+            next_file.unlink()
 
 
 def main():
