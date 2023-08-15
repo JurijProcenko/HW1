@@ -50,23 +50,24 @@ def make_dir():
 
 
 def confirm_replace(next_file, dest):
-    print(f"File {next_file} exists in destination folder")
-    answer = input(
-        f"Do you want overwrite file {next_file}, skip or rename? y/s/r >>> "
-    )
-    if answer in "YyдД":
-        os.replace(next_file, dest)
-    elif answer in "rRрР":
-        add_sym = input("Take me a few symbols(one or more) to add to name file >>> ")
-        ext = dest[dest.rfind(".") :]
-        dest = dest[: dest.rfind(".")]
-        dest = dest + add_sym + ext
-        try:
-            os.rename(next_file, dest)
-        except:
-            confirm_replace(next_file, dest)
-    else:
-        print(f"File {next_file} skipped")
+    # print(f"File {next_file} exists in destination folder")
+    # answer = input(
+    #     f"Do you want overwrite file {next_file}, skip or rename? y/s/r >>> "
+    # )
+    # if answer in "YyдД":
+    #     os.replace(next_file, dest)
+    # elif answer in "rRрР":
+    # add_sym = input("Take me a few symbols(one or more) to add to name file >>> ")
+    add_sym = " Copy"
+    ext = dest[dest.rfind(".") :]
+    dest = dest[: dest.rfind(".")]
+    dest = dest + add_sym + ext
+    try:
+        os.rename(next_file, dest)
+    except:
+        confirm_replace(next_file, dest)
+    # else:
+    #     print(f"File {next_file} skipped")
 
 
 def make_heap():
