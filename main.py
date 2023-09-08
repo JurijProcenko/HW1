@@ -9,6 +9,7 @@ from sys import argv
 import os
 from pathlib import Path
 import string
+import shutil
 
 
 # Rename file name from cyrillic to latin
@@ -34,7 +35,6 @@ def normalize(cyrillic_name: str) -> str:
 def rename_all_files():
     dest_folders.pop("unknown")
     for key in dest_folders:
-        # home = Path(dest_folders[key]+'\\')
         os.chdir(dest_folders[key])
         for next_file in Path.cwd().glob("*.*"):
             name = str(next_file.name)
@@ -49,37 +49,36 @@ def make_dir():
             pass
 
 
-def confirm_replace(next_file, dest):
-    # print(f"File {next_file} exists in destination folder")
-    # answer = input(
-    #     f"Do you want overwrite file {next_file}, skip or rename? y/s/r >>> "
-    # )
-    # if answer in "YyдД":
-    #     os.replace(next_file, dest)
-    # elif answer in "rRрР":
-    # add_sym = input("Take me a few symbols(one or more) to add to name file >>> ")
+def confirm_replace(source_file: Path, dest: Path, new_dest: Path = None):
     add_sym = " Copy"
-    ext = dest[dest.rfind(".") :]
-    dest = dest[: dest.rfind(".")]
-    dest = dest + add_sym + ext
+    if not new_dest:
+        name = str(source_file.name)
+    else:
+        name = str(new_dest.name)
+    ext = name[name.rfind(".") :]
+    new_name = name[: name.rfind(".")]
+    new_name = new_name + add_sym + ext
+    new_dest = dest.with_name(new_name)
     try:
-        os.rename(next_file, dest)
+        os.rename(source_file, new_dest)
     except:
-        confirm_replace(next_file, dest)
-    # else:
-    #     print(f"File {next_file} skipped")
+        confirm_replace(source_file, dest, new_dest)
 
 
 def make_heap():
-    os.mkdir(dest_folders["unknown"])
+    try:
+        os.mkdir(dest_folders["unknown"])
+    except:
+        pass
     for next_file in home.rglob("*.*"):
         if next_file.is_file():
-            name = next_file.name
-            next_file = str(next_file)
+            name = str(next_file.name)
+            # next_file = str(next_file)
             try:
-                os.rename(next_file, dest_folders["unknown"] + "\\" + name)
+                os.rename(next_file, dest_folders["unknown"].joinpath(name))
+
             except:
-                confirm_replace(next_file, dest_folders["unknown"] + "\\" + name)
+                confirm_replace(next_file, dest_folders["unknown"])
 
 
 def move_files():
@@ -90,9 +89,13 @@ def move_files():
                 next_file = str(next_file)
                 known_ext.add(next_file[next_file.rfind(".") + 1 :].lower())
                 try:
-                    os.rename(next_file, dest_folders[key] + "\\" + name)
+                    # os.rename(next_file, dest_folders[key] + "\\" + name)
+                    os.rename(next_file, dest_folders[key].joinpath(name))
                 except:
-                    confirm_replace(next_file, dest_folders[key] + "\\" + name)
+                    confirm_replace(next_file, dest_folders[key].joinpath(name))
+
+
+# Проверить работу с joinpath()
 
 
 def find_unknown_ext():
@@ -106,9 +109,6 @@ def find_unknown_ext():
 
 
 def remove_empty_folders():
-    # for next_file in Path(source_folder).rglob("*"):
-    #     if next_file.is_dir() and len(os.listdir(next_file)) == 0:
-    #         next_file.rmdir()
     for root, dirs, files in os.walk(source_folder, topdown=False):
         for d in dirs:
             curpath = os.path.join(root, d)
@@ -154,7 +154,7 @@ if __name__ == "__main__":
             print("Можливо наступного разу?")
             exit()
 
-    # source_folder = "w:\\Projects\\HW1\\1"
+    # source_folder = r"w:\Projects\HW1\1"
     home = Path(source_folder)
 
     # Cyrillic and latin
@@ -196,13 +196,19 @@ if __name__ == "__main__":
 
     # Destination folders
     dest_folders = {
-        "image": source_folder + "\\images",
-        "doc": source_folder + "\\documents",
-        "video": source_folder + "\\video",
-        "audio": source_folder + "\\audio",
-        "archives": source_folder + "\\archives",
-        "unknown": source_folder + "\\unknown",
+        "image": home.joinpath("images"),
+        "doc": home.joinpath("documents"),
+        "video": home.joinpath("video"),
+        "audio": home.joinpath("audio"),
+        "archives": home.joinpath("archives"),
+        "unknown": home.joinpath("unknown"),
+        # "doc": source_folder + "\\documents",
+        # "video": source_folder + "\\video",
+        # "audio": source_folder + "\\audio",
+        # "archives": source_folder + "\\archives",
+        # "unknown": source_folder + "\\unknown",
     }
+
     extentions = {
         "image": ["JPEG", "PNG", "JPG", "SVG"],
         "doc": ["DOC", "DOCX", "TXT", "PDF", "XLSX", "PPTX", "XLS"],
