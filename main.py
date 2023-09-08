@@ -32,13 +32,13 @@ def normalize(cyrillic_name: str) -> str:
     return name_out + "." + ext
 
 
-def rename_all_files():
-    dest_folders.pop("unknown")
-    for key in dest_folders:
-        os.chdir(dest_folders[key])
-        for next_file in Path.cwd().glob("*.*"):
-            name = str(next_file.name)
-            next_file.replace(normalize(name))
+# def rename_all_files():
+#     dest_folders.pop("unknown")
+#     for key in dest_folders:
+#         os.chdir(dest_folders[key])
+#         for next_file in Path.cwd().glob("*.*"):
+#             name = str(next_file.name)
+#             next_file.replace(normalize(name))
 
 
 def make_dir():
@@ -72,13 +72,11 @@ def make_heap():
         pass
     for next_file in home.rglob("*.*"):
         if next_file.is_file():
-            name = str(next_file.name)
-            # next_file = str(next_file)
+            name = normalize(str(next_file.name))
             try:
                 os.rename(next_file, dest_folders["unknown"].joinpath(name))
-
             except:
-                confirm_replace(next_file, dest_folders["unknown"])
+                confirm_replace(next_file, dest_folders["unknown"].joinpath(name))
 
 
 def move_files():
@@ -86,16 +84,11 @@ def move_files():
         for ext in extentions[key]:
             for next_file in home.glob(f"**/*.{ext}"):
                 name = next_file.name
-                next_file = str(next_file)
-                known_ext.add(next_file[next_file.rfind(".") + 1 :].lower())
+                known_ext.add(str(next_file)[str(next_file).rfind(".") + 1 :].lower())
                 try:
-                    # os.rename(next_file, dest_folders[key] + "\\" + name)
                     os.rename(next_file, dest_folders[key].joinpath(name))
                 except:
                     confirm_replace(next_file, dest_folders[key].joinpath(name))
-
-
-# Проверить работу с joinpath()
 
 
 def find_unknown_ext():
@@ -137,7 +130,7 @@ def main():
     make_dir()  # Создаем папки назначения
     move_files()  # Переносим файлы известных типов в папки назначения
     find_unknown_ext()  # Собираем неизвестные расширения
-    rename_all_files()  # Переводим названия фалов в транслит
+    # rename_all_files()  # Переводим названия фалов в транслит
     unpack_archives()  # Распаковываем архивы
     print("Известные найденные расширения файлов: ", known_ext)
     print("Неизвестные найденные расширения файлов: ", unknown_ext)
