@@ -14,7 +14,7 @@ import shutil
 
 # Rename file name from cyrillic to latin
 def normalize(cyrillic_name: str) -> str:
-    ext = cyrillic_name[cyrillic_name.rfind(".") + 1 :]
+    ext = cyrillic_name[cyrillic_name.rfind(".") :]
     cyrillic_name = cyrillic_name[: cyrillic_name.rfind(".")]
     name_out = ""
     # Convert cyrilic letters to latin, latin letters and
@@ -29,7 +29,7 @@ def normalize(cyrillic_name: str) -> str:
                 name_out += cyr_lat[c]
         else:
             name_out += "_"
-    return name_out + "." + ext
+    return name_out + ext
 
 
 # def rename_all_files():
